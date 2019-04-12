@@ -1,0 +1,172 @@
+{
+	"routings": {
+		"adv": {
+			"type": "order",
+			"senders": {
+				"MMS": [
+					{
+						"name": "SKTMMS_1",
+						"attr": "SKT",
+						"level": 2
+					},
+					{
+						"name": "KTMMS_1",
+						"attr": "KT",
+						"level": 1
+					},
+					{
+						"name": "LGTMMS_1",
+						"attr": "LGT",
+						"level": 3
+					}
+				],
+				"LMS": [
+					{
+						"name": "SKTLMS_1",
+						"attr": "SKT",
+						"level": 3
+					},
+					{
+						"name": "KTLMS_1",
+						"attr": "KT",
+						"level": 1
+					},
+					{
+						"name": "LGTLMS_1",
+						"attr": "LGT",
+						"level": 2
+					}
+				],
+				"SMS": [
+					{
+						"name": "SKT_1",
+						"attr": "SKT",
+						"level": 1
+					},
+					{
+						"name": "KT_1",
+						"attr": "KT",
+						"level": 2
+					},
+					{
+						"name": "LGT_1",
+						"attr": "LGT",
+						"level": 3
+					}
+				]
+			}
+		},
+		"batch": {
+			"type": "order",
+			"senders": {
+				"MMS": [
+					{
+						"name": "SKTMMS_1",
+						"attr": "SKT",
+						"level": 2
+					},
+					{
+						"name": "KTMMS_1",
+						"attr": "KT",
+						"level": 1
+					},
+					{
+						"name": "LGTMMS_1",
+						"attr": "LGT",
+						"level": 3
+					}
+				],
+				"LMS": [
+					{
+						"name": "SKTLMS_1",
+						"attr": "SKT",
+						"level": 3
+					},
+					{
+						"name": "KTLMS_1",
+						"attr": "KT",
+						"level": 1
+					},
+					{
+						"name": "LGTLMS_1",
+						"attr": "LGT",
+						"level": 2
+					}
+				],
+				"SMS": [
+					{
+						"name": "SKT_1",
+						"attr": "SKT",
+						"level": 2
+					},
+					{
+						"name": "KT_1",
+						"attr": "KT",
+						"level": 1
+					},
+					{
+						"name": "LGT_1",
+						"attr": "LGT",
+						"level": 3
+					}
+				]
+			}
+		},
+		"real": {
+			"type": "telecom",
+			"senders": {
+				"MMS": [
+					{
+						"name": "SKTMMS_1",
+						"attr": "SKT",
+						"level": 2
+					},
+					{
+						"name": "KTMMS_1",
+						"attr": "KT",
+						"level": 1
+					},
+					{
+						"name": "LGTMMS_1",
+						"attr": "LGT",
+						"level": 3
+					}
+				],
+				"LMS": [
+					{
+						"name": "SKTLMS_1",
+						"attr": "SKT",
+						"level": 3
+					},
+					{
+						"name": "KTLMS_1",
+						"attr": "KT",
+						"level": 1
+					},
+					{
+						"name": "LGTLMS_1",
+						"attr": "LGT",
+						"level": 2
+					}
+				],
+				"SMS": [
+					{
+						"name": "SKT_1",
+						"attr": "SKT",
+						"level": 1
+					},
+					{
+						"name": "KT_1",
+						"attr": "KT",
+						"level": 3
+					},
+					{
+						"name": "LGT_1",
+						"attr": "LGT",
+						"level": 2
+					}
+				]
+			}
+		}
+	}
+}

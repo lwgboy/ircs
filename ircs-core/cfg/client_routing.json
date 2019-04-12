@@ -1,0 +1,7 @@
+{
+	"client_routings": {
+		"test2": "batch",
+		"test": "batch",
+		"test1": "real"
+	}
+}

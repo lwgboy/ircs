@@ -1,0 +1,21 @@
+{
+	"spamWords": {
+		"ALL": [
+			"some",
+			"the",
+			"it&cool"
+		],
+		"test": [
+			"d",
+			"abc"
+		],
+		"aaa": [
+			"pine",
+			"apple"
+		],
+		"bbb": [
+			"book",
+			"paper"
+		]
+	}
+}
