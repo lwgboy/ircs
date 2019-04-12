@@ -1,5 +1,7 @@
 package com.github.hasoo.ircs.core;
 
+import com.github.hasoo.ircs.core.entity.MsgLog;
+import com.github.hasoo.ircs.core.repository.MessageLogRepository;
 import java.util.Date;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,13 +14,11 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.github.hasoo.ircs.core.entity.MsgLog;
-import com.github.hasoo.ircs.core.repository.MessageLogRepository;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @TestPropertySource("classpath:test.properties")
-@ComponentScan("com.iheart.message.ircs.repository")
+@ComponentScan("com.github.hasoo.ircs.core.repository")
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class JdbcMessageLogRepositoryTest {
 
