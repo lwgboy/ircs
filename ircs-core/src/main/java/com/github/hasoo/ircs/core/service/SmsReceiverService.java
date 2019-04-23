@@ -35,6 +35,7 @@ public class SmsReceiverService implements ReceiverService<SmsRequest> {
 
       // If not able to send to RabbitMQ, it have to send error response.
       publisher.send(MessageTransfer.toMsgLogQue(t, groupname, username, msgKey, resDate));
+
       publisher.send(MessageTransfer.toMessageQue(t, groupname, username, contentPrices.get("SMS"),
           msgKey, resDate));
 

@@ -18,7 +18,7 @@ import com.github.hasoo.ircs.core.repository.MessageLogRepository;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @TestPropertySource("classpath:test.properties")
-@ComponentScan("com.iheart.message.ircs.repository")
+@ComponentScan("com.github.hasoo.ircs.core.repository")
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class JdbcMessageLogRepositoryTest {
 
