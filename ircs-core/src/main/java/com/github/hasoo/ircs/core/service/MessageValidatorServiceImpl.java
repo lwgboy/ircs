@@ -35,11 +35,17 @@ public class MessageValidatorServiceImpl implements MessageValidatorService {
   }
 
   public void validateMessage(MessageQue messageQue) {
-    ResultCode resultCode = checkCallback(messageQue);
-    if (resultCode == ResultCode.SUCCESS) {
-      resultCode = checkSpam(messageQue);
+    ResultCode rcCallback = checkCallback(messageQue);
+    if (rcCallback != ResultCode.SUCCESS) {
+      failure(messageQue, rcCallback);
+      return;
     }
-    finisher(messageQue, resultCode);
+    ResultCode rcSpam = checkSpam(messageQue);
+    if (rcSpam != ResultCode.SUCCESS) {
+      failure(messageQue, rcSpam);
+      return;
+    }
+    route(messageQue);
   }
 
   private ResultCode checkCallback(MessageQue messageQue) {
@@ -65,14 +71,6 @@ public class MessageValidatorServiceImpl implements MessageValidatorService {
       return ResultCode.SPAMMESSAGE;
     }
     return ResultCode.SUCCESS;
-  }
-
-  private void finisher(MessageQue messageQue, ResultCode resultCode) {
-    if (ResultCode.SUCCESS == resultCode) {
-      route(messageQue) ;
-    } else {
-      failure(messageQue, resultCode);
-    }
   }
 
   private void failure(MessageQue messageQue, ResultCode resultCode) {
