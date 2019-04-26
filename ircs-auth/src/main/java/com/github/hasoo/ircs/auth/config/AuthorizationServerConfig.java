@@ -1,13 +1,11 @@
 package com.github.hasoo.ircs.auth.config;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Arrays;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,26 +27,24 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+
+  private final AuthenticationManager authenticationManager;
+  private final SecretKeyProvider keyProvider;
+  private final PasswordEncoder passwordEncoder;
   @Value("${security.oauth2.resource.id}")
   private String resourceId;
-
   @Value("${access_token.validity_period}")
   private int accessTokenValiditySeconds;
-
   @Value("${refresh_token.validity_period}")
   private int refreshTokenValiditySeconds;
 
-  @Autowired
-  private AuthenticationManager authenticationManager;
-
-  @Autowired
-  private SecretKeyProvider keyProvider;
-
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-
-  @Autowired
-  private CustomAccessTokenConverter customAccessTokenConverter;
+  public AuthorizationServerConfig(
+      AuthenticationManager authenticationManager, SecretKeyProvider keyProvider,
+      PasswordEncoder passwordEncoder) {
+    this.authenticationManager = authenticationManager;
+    this.keyProvider = keyProvider;
+    this.passwordEncoder = passwordEncoder;
+  }
 
   @Bean
   public TokenStore tokenStore() {
@@ -60,8 +56,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
     try {
       converter.setSigningKey(keyProvider.getKey());
-      converter.setAccessTokenConverter(customAccessTokenConverter);
-    } catch (URISyntaxException | KeyStoreException | NoSuchAlgorithmException | IOException
+    } catch (KeyStoreException | NoSuchAlgorithmException | IOException
         | UnrecoverableKeyException | CertificateException e) {
       e.printStackTrace();
     }
@@ -88,12 +83,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   }
 
   @Override
-  public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+  public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
     endpoints.authenticationManager(this.authenticationManager).tokenServices(tokenServices());
   }
 
   @Override
-  public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+  public void configure(AuthorizationServerSecurityConfigurer security) {
     security.tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
         .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
   }

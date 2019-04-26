@@ -2,7 +2,6 @@ package com.github.hasoo.ircs.core.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyStore;
@@ -17,7 +16,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SecretKeyProvider {
-  public String getKey() throws URISyntaxException, KeyStoreException, IOException,
+
+  public String getKey() throws KeyStoreException, IOException,
       NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
     return new String(getKeyPair().getPublic().getEncoded(), "UTF-8");
   }
