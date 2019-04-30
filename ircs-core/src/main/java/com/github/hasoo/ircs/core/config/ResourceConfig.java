@@ -69,6 +69,7 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
         .authorizeRequests()
           .antMatchers(HttpMethod.OPTIONS).permitAll()
           .antMatchers("/api/v1/sms").access("hasAnyRole('USER')")
+          .antMatchers("/api/v2/sms").access("hasAnyRole('USER')")
         ;
     // @formatter:on
   }
