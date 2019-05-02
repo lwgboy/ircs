@@ -1,7 +1,7 @@
 package com.github.hasoo.ircs.core.queue;
 
 import com.github.hasoo.ircs.core.router.map.Sender;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SenderQue {
+
   private String msgKey;
   private String userKey;
   private String groupname;
   private String username;
   private Double fee;
-  private Date resDate;
-  private Date sentDate;
+  private LocalDateTime resDate;
+  private LocalDateTime sentDate;
   private String msgType;
   private String contentType;
   private String phone;
@@ -25,7 +26,7 @@ public class SenderQue {
   private String message;
   private String code;
   private String desc;
-  private Date doneDate;
+  private LocalDateTime doneDate;
   private String net;
 
   private String routingType;

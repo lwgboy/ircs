@@ -1,6 +1,6 @@
 package com.github.hasoo.ircs.core.queue;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,14 +12,15 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MsgLogQue {
   private String msgKey;
+  private String groupKey;
   private String userKey;
   private String groupname;
   private String username;
-  private Date resDate;
-  private Date routeDate;
-  private Date sentDate;
-  private Date doneDate;
-  private Date reportDate;
+  private LocalDateTime resDate;
+  private LocalDateTime routeDate;
+  private LocalDateTime sentDate;
+  private LocalDateTime doneDate;
+  private LocalDateTime reportDate;
   private Integer status;
   private String msgType;
   private String contentType;

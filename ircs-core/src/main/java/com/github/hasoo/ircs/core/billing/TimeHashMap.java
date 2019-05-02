@@ -1,6 +1,6 @@
 package com.github.hasoo.ircs.core.billing;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -12,15 +12,8 @@ public class TimeHashMap<K, E> {
 
   private HashMap<K, TimeQue<E>> expiringMap = new HashMap<>();
 
-  @Data
-  @AllArgsConstructor
-  private class TimeQue<T> {
-    private T t;
-    private Date updatedDate;
-  }
-
   public void put(K k, E e) {
-    expiringMap.put(k, new TimeQue<E>(e, new Date()));
+    expiringMap.put(k, new TimeQue<E>(e, LocalDateTime.now()));
   }
 
   public Optional<E> get(K k) {
@@ -28,14 +21,14 @@ public class TimeHashMap<K, E> {
   }
 
   public void replace(K k, E e) {
-    expiringMap.replace(k, new TimeQue<E>(e, new Date()));
+    expiringMap.replace(k, new TimeQue<E>(e, LocalDateTime.now()));
   }
 
   public void remove(K k) {
     expiringMap.remove(k);
   }
 
-  public void loopElements(CallbackQue<K, E, Date> callbackQue) {
+  public void loopElements(CallbackQue<K, E, LocalDateTime> callbackQue) {
     Iterator<Entry<K, TimeQue<E>>> itor = expiringMap.entrySet().iterator();
     while (itor.hasNext()) {
       Entry<K, TimeQue<E>> entry = itor.next();
@@ -48,5 +41,13 @@ public class TimeHashMap<K, E> {
 
   private E getE(TimeQue<E> que) {
     return que.getT();
+  }
+
+  @Data
+  @AllArgsConstructor
+  private class TimeQue<T> {
+
+    private T t;
+    private LocalDateTime updatedDate;
   }
 }

@@ -2,7 +2,7 @@ package com.github.hasoo.ircs.core;
 
 import com.github.hasoo.ircs.core.entity.MsgLog;
 import com.github.hasoo.ircs.core.repository.MessageLogRepository;
-import java.util.Date;
+import java.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +41,11 @@ public class JdbcMessageLogRepositoryTest {
           .userKey("1004")
           .groupname("TEST")
           .username("test")
-          .resDate(new Date())
-          .routeDate(new Date())
-          .sentDate(new Date())
-          .doneDate(new Date())
-          .reportDate(new Date())
+          .resDate(LocalDateTime.now())
+          .routeDate(LocalDateTime.now())
+          .sentDate(LocalDateTime.now())
+          .doneDate(LocalDateTime.now())
+          .reportDate(LocalDateTime.now())
           .msgType("SMS")
           .contentType("SMS")
           .phone("01012341234")

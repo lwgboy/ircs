@@ -1,8 +1,8 @@
 package com.github.hasoo.ircs.core.queue;
 
-import java.util.Date;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +18,6 @@ public class ReportQue {
   private String phone;
   private String code;
   private String desc;
-  private Date doneDate;
+  private LocalDateTime doneDate;
   private String net;
 }

@@ -1,11 +1,14 @@
 package com.github.hasoo.ircs.core.billing;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BillingManager {
+
   private TimeHashMap<String, Double> timeHashMap = new TimeHashMap<>();
 
   private BillingProvider billingProvider;
@@ -16,6 +19,10 @@ public class BillingManager {
     this.billingProvider = builder.billingProvider;
     this.billingMilliSec = builder.billingMilliSec;
     this.standardRate = builder.standardRate;
+  }
+
+  public static BillingManagerBuilder builder() {
+    return new BillingManagerBuilder();
   }
 
   public synchronized void bill(String username, double fee) {
@@ -29,30 +36,26 @@ public class BillingManager {
   }
 
   public synchronized void perform() {
-    CallbackQue<String, Double, Date> callbackQue = new CallbackQue<String, Double, Date>() {
-      public boolean pushAfterRemove(String username, Double fee, Date date) {
-        if ((standardRate * -1 >= fee) || (standardRate <= fee)
-            || (billingMilliSec <= (new Date().getTime() - date.getTime()))) {
-          if (0 == fee.doubleValue()) {
-            return false;
-          }
-          log.debug("billing {} {}", username, fee);
-          billingProvider.bill(username, fee.doubleValue());
-          return true;
+    CallbackQue<String, Double, LocalDateTime> callbackQue = (username, fee, date) -> {
+      if ((standardRate * -1 >= fee) || (standardRate <= fee)
+          || (billingMilliSec <= (Instant.now().toEpochMilli() - date.atZone(ZoneId.systemDefault())
+          .toInstant().toEpochMilli()))) {
+        if (0 == fee) {
+          return false;
         }
-
-        return false;
+        log.debug("billing {} {}", username, fee);
+        billingProvider.bill(username, fee);
+        return true;
       }
+
+      return false;
     };
 
     timeHashMap.loopElements(callbackQue);
   }
 
-  public static BillingManagerBuilder builder() {
-    return new BillingManagerBuilder();
-  }
-
   public static class BillingManagerBuilder {
+
     private BillingProvider billingProvider;
     private int billingMilliSec = 1000;
     private double standardRate = 100;

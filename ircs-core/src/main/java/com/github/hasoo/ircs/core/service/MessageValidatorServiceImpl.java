@@ -8,7 +8,7 @@ import com.github.hasoo.ircs.core.queue.ReportQue;
 import com.github.hasoo.ircs.core.rabbitmq.Publisher;
 import com.github.hasoo.ircs.core.spam.SpamFilter;
 import com.github.hasoo.ircs.core.util.MessageTransfer;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -77,11 +77,11 @@ public class MessageValidatorServiceImpl implements MessageValidatorService {
     publisher.send(new ReportQue(messageQue.getUsername(), messageQue.getMsgKey(),
         messageQue.getUserKey(), messageQue.getPhone(), resultCode.getCode(),
         resultCode.getDesc(),
-        new Date(),
+        LocalDateTime.now(),
         NetCode.ETC.getCode()));
     publisher.send(MessageTransfer
         .toMsgLogQue(messageQue.getMsgKey(), null, resultCode.getCode(), resultCode.getDesc(),
-            new Date(), NetCode.ETC.getCode()));
+            LocalDateTime.now(), NetCode.ETC.getCode()));
   }
 
   private void route(MessageQue messageQue) {

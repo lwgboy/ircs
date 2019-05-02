@@ -1,6 +1,6 @@
 package com.github.hasoo.ircs.core.queue;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +16,5 @@ public class SmsQue {
   private String phone;
   private String callback;
   private String message;
-  private Date resDate;
+  private LocalDateTime resDate;
 }

@@ -1,16 +1,16 @@
 package com.github.hasoo.ircs.core.util;
 
+import com.github.hasoo.ircs.core.dto.SmsRequest;
 import com.github.hasoo.ircs.core.entity.MsgLog;
 import com.github.hasoo.ircs.core.queue.MessageQue;
 import com.github.hasoo.ircs.core.queue.MsgLogQue;
 import com.github.hasoo.ircs.core.queue.SenderQue;
-import java.util.Date;
-import com.github.hasoo.ircs.core.dto.SmsRequest;
+import java.time.LocalDateTime;
 
 public class MessageTransfer {
 
   public static MsgLogQue toMsgLogQue(SmsRequest smsRequest, String groupname, String username,
-      String msgKey, Date resDate) {
+      String msgKey, LocalDateTime resDate) {
     // @formatter:off
     return MsgLogQue.builder()
         .msgKey(msgKey)
@@ -28,8 +28,9 @@ public class MessageTransfer {
     // @formatter:on
   }
 
-  public static MsgLogQue toMsgLogQue(String msgKey, Date routeDate, Date sentDate,
-      String routingKey, String code, String desc, Date doneDate, String net) {
+  public static MsgLogQue toMsgLogQue(String msgKey, LocalDateTime routeDate,
+      LocalDateTime sentDate,
+      String routingKey, String code, String desc, LocalDateTime doneDate, String net) {
     // @formatter:off
     return MsgLogQue.builder()
         .msgKey(msgKey)
@@ -45,8 +46,9 @@ public class MessageTransfer {
     // @formatter:on
   }
 
-  public static MsgLogQue toMsgLogQue(String msgKey, Date sentDate, String code, String desc,
-      Date doneDate, String net) {
+  public static MsgLogQue toMsgLogQue(String msgKey, LocalDateTime sentDate, String code,
+      String desc,
+      LocalDateTime doneDate, String net) {
     // @formatter:off
     return MsgLogQue.builder()
         .msgKey(msgKey)
@@ -64,6 +66,7 @@ public class MessageTransfer {
     // @formatter:off
     return new MsgLog(
         msgLogQue.getMsgKey(),
+        msgLogQue.getGroupKey(),
         msgLogQue.getUserKey(),
         msgLogQue.getGroupname(),
         msgLogQue.getUsername(),
@@ -87,10 +90,11 @@ public class MessageTransfer {
   }
 
   public static MessageQue toMessageQue(SmsRequest r, String groupname, String username, double fee,
-      String msgKey, Date resDate) {
+      String msgKey, LocalDateTime resDate) {
     // @formatter:off
     return new MessageQue(
         msgKey,
+        "",
         r.getKey(),
         groupname,
         username,
