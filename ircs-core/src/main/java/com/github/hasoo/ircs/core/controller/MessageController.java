@@ -28,6 +28,9 @@ public class MessageController {
   private ReceiverService<SmsRequest> smsReceiverService;
 
   @Autowired
+  private ReceiverService<MultipleSms> multipleSmsReceiverService;
+
+  @Autowired
   @Qualifier("reportDeliverService")
   private ReportDeliverService ReportDeliverService;
 

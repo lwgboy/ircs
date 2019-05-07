@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MessageQue {
+
   private String msgKey;
   private String groupKey;
   private String userKey;

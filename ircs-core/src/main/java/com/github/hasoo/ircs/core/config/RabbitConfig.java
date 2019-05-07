@@ -1,5 +1,6 @@
 package com.github.hasoo.ircs.core.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.amqp.core.Binding;
@@ -68,7 +69,8 @@ public class RabbitConfig {
 
   @Bean
   public Jackson2JsonMessageConverter jsonMessageConverter() {
-    return new Jackson2JsonMessageConverter();
+    ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+    return new Jackson2JsonMessageConverter(mapper);
   }
 
   @Bean

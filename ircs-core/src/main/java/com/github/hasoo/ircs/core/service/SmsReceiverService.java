@@ -12,7 +12,6 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -20,8 +19,11 @@ import org.springframework.stereotype.Service;
 public class SmsReceiverService implements ReceiverService<SmsRequest> {
   private static final Logger mlog = LoggerFactory.getLogger("message");
 
-  @Autowired
-  private Publisher publisher;
+  private final Publisher publisher;
+
+  public SmsReceiverService(Publisher publisher) {
+    this.publisher = publisher;
+  }
 
   @Override
   public boolean receive(SmsRequest t) {
