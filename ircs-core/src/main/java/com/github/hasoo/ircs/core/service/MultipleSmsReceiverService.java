@@ -35,31 +35,47 @@ public class MultipleSmsReceiverService implements ReceiverService<MultipleSms> 
       String msgKey = MessageUniqueId.get();
 
       List<Phone> phones = multipleSms.getPhones();
+
       for (Phone phone : phones) {
         String message = convertTemplates(phone.getTemplates(), multipleSms.getMessage());
-        // @formatter:off
         publisher.send(
-            toMsgLogQue(
-                  msgKey
-                , multipleSms.getGroupKey()
-                , phone.getKey()
-                , groupname
-                , username
-                , LocalDateTime.now()
-                , 0
-                , phone.getPhone()
-                , multipleSms.getCallback()
-                , message
-            )
+            MsgLogQue.builder()
+                .msgKey(msgKey)
+                .groupKey(multipleSms.getGroupKey())
+                .userKey(phone.getKey())
+                .groupname(groupname)
+                .username(username)
+                .resDate(LocalDateTime.now())
+                .status(1)
+                .phone(phone.getPhone())
+                .callback(multipleSms.getCallback())
+                .message(message)
+                .build()
         );
-        // @formatter:on
-      }
 
+        publisher.send(
+            MessageQue.builder()
+                .msgKey(msgKey)
+                .groupKey(multipleSms.getGroupKey())
+                .userKey(phone.getKey())
+                .groupname(groupname)
+                .username(username)
+                .fee(contentPrices.get(ContentPriceCode.SMS.getCode()))
+                .resDate(resDate)
+                .msgType(MsgType.SMS.getType())
+                .contentType(ContentPriceCode.SMS.getCode())
+                .phone(phone.getPhone())
+                .callback(multipleSms.getCallback())
+                .message(message)
+                .build()
+        );
+      }
     } catch (Exception e) {
 //      log.error(HUtil.getStackTrace(e));
       log.error("", e);
+      return false;
     }
-    return false;
+    return true;
   }
 
   private String convertTemplates(Map<String, String> messageTemplates, String message) {
@@ -68,62 +84,4 @@ public class MultipleSmsReceiverService implements ReceiverService<MultipleSms> 
     }
     return message;
   }
-
-  // @formatter:off
-  private MsgLogQue toMsgLogQue(
-        String msgKey
-      , String groupKey
-      , String userKey
-      , String groupname
-      , String username
-      , LocalDateTime resDate
-      , Integer status
-      , String phone
-      , String callback
-      , String message
-  ) {
-    return MsgLogQue.builder()
-        .msgKey(msgKey)
-        .groupKey(groupKey)
-        .userKey(userKey)
-        .groupname(groupname)
-        .username(username)
-        .resDate(resDate)
-        .status(status)
-        .phone(phone)
-        .callback(callback)
-        .message(message)
-        .build();
-  }
-  // @formatter:on
-
-  // @formatter:off
-  private MessageQue toMessageQue(
-        String msgKey
-      , String groupKey
-      , String userKey
-      , String groupname
-      , String username
-      , Double fee
-      , LocalDateTime resDate
-      , String phone
-      , String callback
-      , String message
-  ) {
-    return MessageQue.builder()
-          .msgKey(msgKey)
-          .groupKey(groupKey)
-          .userKey(userKey)
-          .groupname(groupname)
-          .username(username)
-          .fee(fee)
-          .resDate(resDate)
-          .msgType(MsgType.SMS.getType())
-          .contentType(ContentPriceCode.SMS.getCode())
-          .phone(phone)
-          .callback(callback)
-          .message(message)
-        .build();
-  }
-  // @formatter:on
 }

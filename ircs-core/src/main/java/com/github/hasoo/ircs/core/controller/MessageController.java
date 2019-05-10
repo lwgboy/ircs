@@ -10,7 +10,6 @@ import com.github.hasoo.ircs.core.service.ReportDeliverService;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +23,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MessageController {
 
-  @Autowired
-  private ReceiverService<SmsRequest> smsReceiverService;
+  private final ReceiverService<SmsRequest> smsReceiverService;
 
-  @Autowired
-  private ReceiverService<MultipleSms> multipleSmsReceiverService;
+  private final ReceiverService<MultipleSms> multipleSmsReceiverService;
 
-  @Autowired
-  @Qualifier("reportDeliverService")
-  private ReportDeliverService ReportDeliverService;
+  private final ReportDeliverService ReportDeliverService;
+
+  public MessageController(
+      ReceiverService<SmsRequest> smsReceiverService,
+      ReceiverService<MultipleSms> multipleSmsReceiverService,
+      @Qualifier("reportDeliverService") ReportDeliverService ReportDeliverService) {
+    this.smsReceiverService = smsReceiverService;
+    this.multipleSmsReceiverService = multipleSmsReceiverService;
+    this.ReportDeliverService = ReportDeliverService;
+  }
 
   @PostMapping(path = "/api/v1/sms", produces = "application/json")
   public ResponseEntity<?> receiveSms(@Valid @RequestBody SmsRequest smsRequest) {
@@ -50,6 +54,11 @@ public class MessageController {
   public ResponseEntity<?> receiveMultipleSms(@Valid @RequestBody MultipleSms multipleSms) {
 
     log.info(multipleSms.toString());
+
+    if (!multipleSmsReceiverService.receive(multipleSms)) {
+      return new ResponseEntity<Object>(
+          new MessageResponse(multipleSms.getGroupKey(), "inner error", "9000"), HttpStatus.OK);
+    }
 
     return new ResponseEntity<Object>(
         new MessageResponse(multipleSms.getGroupKey(), "success", "1000"),
