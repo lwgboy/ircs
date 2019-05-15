@@ -4,6 +4,7 @@ import com.github.hasoo.ircs.core.dto.MessageResponse;
 import com.github.hasoo.ircs.core.dto.MultipleSms;
 import com.github.hasoo.ircs.core.dto.ReportResponse;
 import com.github.hasoo.ircs.core.dto.SmsRequest;
+import com.github.hasoo.ircs.core.dto.UploadResponse;
 import com.github.hasoo.ircs.core.queue.ReportQue;
 import com.github.hasoo.ircs.core.service.ReceiverService;
 import com.github.hasoo.ircs.core.service.ReportDeliverService;
@@ -17,7 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -85,5 +88,13 @@ public class MessageController {
     }
 
     return new ResponseEntity<Object>(reportResponse, HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/api/v1/upload")
+  public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+    return new ResponseEntity<Object>(
+        new UploadResponse(file.getOriginalFilename(), file.getContentType(), file.getName(),
+            "1000", "success"),
+        HttpStatus.OK);
   }
 }
