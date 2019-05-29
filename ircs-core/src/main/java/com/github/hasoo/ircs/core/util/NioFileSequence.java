@@ -10,41 +10,48 @@ public class NioFileSequence implements FileSequence {
 
   private FileChannel fileChannel = null;
 
-  public NioFileSequence(String filename) {
-    try {
-      this.fileChannel = FileChannel
-          .open(Paths.get(filename), StandardOpenOption.WRITE, StandardOpenOption.READ
-              , StandardOpenOption.CREATE);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  private ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+
+  public NioFileSequence(String filename) throws IOException {
+    this.fileChannel = FileChannel
+        .open(Paths.get(filename), StandardOpenOption.WRITE, StandardOpenOption.READ
+            , StandardOpenOption.CREATE);
   }
 
   @Override
-  public synchronized int getSequence() {
-    try {
-      ByteBuffer byteBuffer = ByteBuffer.allocate(4);
-      if (-1 == fileChannel.read(byteBuffer, 0)) {
-        byteBuffer.putInt(1);
-        byteBuffer.flip();
-        fileChannel.write(byteBuffer);
-        return 0;
-      } else {
-        byteBuffer.flip();
-        int seq = byteBuffer.getInt();
-        byteBuffer.flip();
-        if (Integer.MAX_VALUE == seq) {
-          byteBuffer.putInt(0);
-        } else {
-          byteBuffer.putInt(seq + 1);
-        }
-        byteBuffer.flip();
-        fileChannel.write(byteBuffer, 0);
-        return seq;
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
+  public void close() throws IOException {
+    fileChannel.close();
+  }
+
+  @Override
+  public void writeInt(int n) throws IOException {
+    byteBuffer.clear();
+    byteBuffer.putInt(n);
+    byteBuffer.flip();
+    fileChannel.write(byteBuffer, 0);
+  }
+
+  @Override
+  public int readInt() throws IOException {
+    byteBuffer.clear();
+    if (-1 == fileChannel.read(byteBuffer, 0)) {
+      return -1;
     }
-    return -1;
+    byteBuffer.flip();
+    return byteBuffer.getInt();
+  }
+
+  @Override
+  public synchronized int getSequence() throws IOException {
+    int seq = readInt();
+    if (-1 == seq) {
+      seq = 0;
+    } else {
+      if (Integer.MAX_VALUE == seq) {
+        seq = -1;
+      }
+    }
+    writeInt(seq + 1);
+    return seq;
   }
 }
