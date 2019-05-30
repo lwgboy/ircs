@@ -2,13 +2,24 @@ package com.github.hasoo.ircs.core.util;
 
 import java.io.IOException;
 
-public interface FileSequence {
+public abstract class FileSequence {
 
-  public int getSequence() throws IOException;
+  public synchronized int getSequence() throws IOException {
+    int seq = readInt();
+    if (-1 == seq) {
+      seq = 0;
+    } else {
+      if (Integer.MAX_VALUE == seq) {
+        seq = -1;
+      }
+    }
+    writeInt(seq + 1);
+    return seq;
+  }
 
-  public void close() throws IOException;
+  protected abstract void close() throws IOException;
 
-  void writeInt(int n) throws IOException;
+  protected abstract void writeInt(int n) throws IOException;
 
-  int readInt() throws IOException;
+  protected abstract int readInt() throws IOException;
 }
