@@ -1,5 +1,6 @@
 package com.github.hasoo.ircs.core.config;
 
+import com.github.hasoo.ircs.core.util.NioFileSequence;
 import java.io.IOException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -53,6 +54,16 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
     }
 
     return converter;
+  }
+
+  @Bean
+  public NioFileSequence nioFileSequence() {
+    try {
+      return new NioFileSequence("./seq/file.seq");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   @Override

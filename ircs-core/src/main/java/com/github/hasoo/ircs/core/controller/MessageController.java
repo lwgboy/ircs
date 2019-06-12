@@ -8,6 +8,8 @@ import com.github.hasoo.ircs.core.dto.UploadResponse;
 import com.github.hasoo.ircs.core.queue.ReportQue;
 import com.github.hasoo.ircs.core.service.ReceiverService;
 import com.github.hasoo.ircs.core.service.ReportDeliverService;
+import com.github.hasoo.ircs.core.util.NioFileSequence;
+import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +34,17 @@ public class MessageController {
 
   private final ReportDeliverService ReportDeliverService;
 
+  private final NioFileSequence nioFileSequence;
+
   public MessageController(
       ReceiverService<SmsRequest> smsReceiverService,
       ReceiverService<MultipleSms> multipleSmsReceiverService,
-      @Qualifier("reportDeliverService") ReportDeliverService ReportDeliverService) {
+      @Qualifier("reportDeliverService") ReportDeliverService ReportDeliverService,
+      NioFileSequence nioFileSequence) {
     this.smsReceiverService = smsReceiverService;
     this.multipleSmsReceiverService = multipleSmsReceiverService;
     this.ReportDeliverService = ReportDeliverService;
+    this.nioFileSequence = nioFileSequence;
   }
 
   @PostMapping(path = "/api/v1/sms", produces = "application/json")
@@ -92,6 +98,17 @@ public class MessageController {
 
   @PostMapping(path = "/api/v1/upload")
   public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+    if (file.isEmpty()) {
+      return new ResponseEntity<Object>(new UploadResponse("", "", "", "4000", "empty file"),
+          HttpStatus.OK);
+    }
+
+    try {
+      log.info("fileSequence:" + nioFileSequence.getSequence());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     return new ResponseEntity<Object>(
         new UploadResponse(file.getOriginalFilename(), file.getContentType(), file.getName(),
             "1000", "success"),
