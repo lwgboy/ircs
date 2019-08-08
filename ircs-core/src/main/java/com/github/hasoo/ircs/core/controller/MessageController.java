@@ -8,6 +8,7 @@ import com.github.hasoo.ircs.core.dto.UploadResponse;
 import com.github.hasoo.ircs.core.queue.ReportQue;
 import com.github.hasoo.ircs.core.service.ReceiverService;
 import com.github.hasoo.ircs.core.service.ReportDeliverService;
+import com.github.hasoo.ircs.core.service.UploadService;
 import com.github.hasoo.ircs.core.util.NioFileSequence;
 import java.io.IOException;
 import java.util.List;
@@ -36,15 +37,19 @@ public class MessageController {
 
   private final NioFileSequence nioFileSequence;
 
+  private final UploadService uploadService;
+
   public MessageController(
       ReceiverService<SmsRequest> smsReceiverService,
       ReceiverService<MultipleSms> multipleSmsReceiverService,
       @Qualifier("reportDeliverService") ReportDeliverService ReportDeliverService,
-      NioFileSequence nioFileSequence) {
+      NioFileSequence nioFileSequence,
+      UploadService uploadService) {
     this.smsReceiverService = smsReceiverService;
     this.multipleSmsReceiverService = multipleSmsReceiverService;
     this.ReportDeliverService = ReportDeliverService;
     this.nioFileSequence = nioFileSequence;
+    this.uploadService = uploadService;
   }
 
   @PostMapping(path = "/api/v1/sms", produces = "application/json")
@@ -102,6 +107,8 @@ public class MessageController {
       return new ResponseEntity<Object>(new UploadResponse("", "", "", "4000", "empty file"),
           HttpStatus.OK);
     }
+
+    uploadService.store(file);
 
     try {
       log.info("fileSequence:" + nioFileSequence.getSequence());

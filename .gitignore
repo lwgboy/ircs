@@ -25,4 +25,6 @@ nbdist/
 .nb-gradle/
 
 logs/
+uploads/
+seq/
 .attach_pid*

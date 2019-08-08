@@ -17,11 +17,11 @@ public class UploadServiceTest {
 
   @Test
   public void testPath() {
-    System.out.println(uploadService.getUploadDir());
+//    System.out.println(uploadService.getUploadDir());
   }
 
   @Test
   public void testCreatePath() {
-    uploadService.createFullPath();
+//    uploadService.createFullPath();
   }
 }
