@@ -1,5 +1,8 @@
 package com.github.hasoo.ircs.core.service;
 
+import com.github.hasoo.ircs.core.util.FileSequence;
+import com.github.hasoo.ircs.core.util.HUtil;
+import com.github.hasoo.ircs.core.util.NioFileSequence;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,19 +20,14 @@ public class UploadService {
   @Value("${rest.server.file.upload-dir}")
   private String uploadDir;
 
-//  private final Path uploadPath;
-//  public UploadService() {
-//    this.uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
-//  }
+  private FileSequence fileSequence;
 
-  public Path createFullPath(String fullpath) {
-    File file = new File(fullpath);
-    file.mkdirs();
-    return file.toPath();
+  public UploadService() {
+    this.fileSequence = new NioFileSequence();
   }
 
-  public void store(MultipartFile file) {
-    String filename = StringUtils.cleanPath(file.getOriginalFilename());
+  public void store(MultipartFile file, String username) {
+//    String filename = StringUtils.cleanPath(file.getOriginalFilename());
 
     Path targetLocation = Paths.get(this.uploadDir, filename).toAbsolutePath().normalize();
     System.out.println("targetLocation:" + targetLocation.toString());
@@ -39,5 +37,19 @@ public class UploadService {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  private Path createFullPath(String fullpath) {
+    File file = new File(fullpath);
+    file.mkdirs();
+    return file.toPath();
+  }
+
+  private Path getFullPath(String username) {
+    String yyyymmddhhmm = HUtil.getCurrentDate12();
+
+    String filename = yyyymmddhhmm + "_" +
+
+    return fullpath;
   }
 }

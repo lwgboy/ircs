@@ -52,7 +52,7 @@ public class FileSequenceTest {
       FileSequence fileSequence = new RandomAccessFileSequence(filename);
       StopWatch stopWatch = new StopWatch();
       stopWatch.start();
-      for (int i = 0; i < 10000000; i++) {
+      for (int i = 0; i < 100; i++) {
         fileSequence.getSequence();
       }
       System.out.println("seq:" + fileSequence.getSequence());
@@ -72,7 +72,7 @@ public class FileSequenceTest {
       FileSequence fileSequence = new NioFileSequence(filename);
       StopWatch stopWatch = new StopWatch();
       stopWatch.start();
-      for (int i = 0; i < 10000000; i++) {
+      for (int i = 0; i < 100; i++) {
         fileSequence.getSequence();
       }
       System.out.println("seq:" + fileSequence.getSequence());
